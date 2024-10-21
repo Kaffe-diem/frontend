@@ -47,7 +47,7 @@
 </script>
 
 {#if isAuthenticated}
-  <button on:click={logout}>Logg ut</button>
+  <button on:click={logout} class={$$restProps.class || ''}><slot>Logg ut</slot></button>
 {:else}
-  <button on:click={login}>Logg inn</button>
+  <button on:click={login} class={$$restProps.class || ''}><slot>Logg inn</slot></button>
 {/if}
