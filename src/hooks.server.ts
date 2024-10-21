@@ -12,6 +12,8 @@ export const handle: Handle = async ({ event, resolve }) => {
     throw redirect(303, "/");
   }
 
+  event.locals.pb = pb;
+
   const response = await resolve(event);
 
   response.headers.set(
