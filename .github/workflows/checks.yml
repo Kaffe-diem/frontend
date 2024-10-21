@@ -1,0 +1,30 @@
+name: Check and Format
+
+# PR opened, closed or updated
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  checks:
+    name: Run Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm check
+        run: npm run check
+
+      - name: Run npm check:format
+        run: npm run check:format
