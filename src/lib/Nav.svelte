@@ -28,7 +28,8 @@
   const navItems = [
     new NavItem("/drinks", "Meny"),
     new NavItem("/display", "Visning"),
-    new NavItem("/account", "Min bruker")
+    new NavItem("/account", "Min bruker"),
+    new NavItem("/status", "Min bestilling")
   ];
 </script>
 
