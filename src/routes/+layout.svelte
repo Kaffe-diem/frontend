@@ -20,5 +20,8 @@
     {/if}
   </div>
 
-  <Footer />
+  <!-- Display-siden skal heller ikke ha footer -->
+  {#if !$page.url.pathname.includes("display")}
+    <Footer />
+  {/if}
 </div>
