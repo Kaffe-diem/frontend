@@ -34,7 +34,7 @@
   </main>
 {/if}
 
-<div class="absolute bottom-0 left-0 hidden md:flex">
+<div class="absolute bottom-0 left-0 hidden md:flex w-screen">
   <a href="/">
     <img class="h-48 w-48" src={QR} alt="QR code" />
   </a>
@@ -42,5 +42,11 @@
     <span>Skann eller besøk</span>
     <a href="https://kaffediem.asvg.no" class="font-bold text-accent">kaffediem.asvg.no</a>
     <span>for å bestille</span>
+  </div>
+
+</div>
+<div class="absolute bottom-0 left-0 hidden md:flex w-screen">
+  <div class="ml-2 mr-2 flex flex-col items-center justify-center py-1 text-xl text-neutral flex-grow text-center h-48">
+    <p>Laget av elevene fra ITK :) </p>
   </div>
 </div>
