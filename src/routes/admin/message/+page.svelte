@@ -21,10 +21,10 @@
       })
     );
 
-    const isActive = message.id === $activeMessage.message.id;
-    if (isActive) {
-      debounce(handleActiveMessageChange, 100)(message);
-    }
+    // const isActive = message.id === $activeMessage.message.id;
+    // if (isActive) {
+    //   debounce(handleActiveMessageChange, 100)(message);
+    // }
   };
 
   const handleVisibilityChange = () => {

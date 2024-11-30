@@ -16,10 +16,14 @@ const mapToMessage = (data: { id: string; title: string; subtext: string }): Mes
 
 // FIXME: again, pocketbase typing
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mapToActiveMessage = (data: { id: string; expand: any; isVisible: boolean }): ActiveMessage =>
+const mapToActiveMessage = (data: {
+  id: string;
+  message: any;
+  isVisible: boolean;
+}): ActiveMessage =>
   new ActiveMessage({
     id: data.id,
-    message: mapToMessage(data.expand.message),
+    message: mapToMessage(data.message),
     visible: data.isVisible
   });
 
@@ -44,7 +48,7 @@ export const messages = {
 
 function createActiveMessageStore() {
   // Initialize with dummy non-visible message
-  const { subscribe, set } = writable<ActiveMessage>(
+  const { subscribe, set, update } = writable<ActiveMessage>(
     new ActiveMessage({
       id: "",
       visible: false,
@@ -57,24 +61,39 @@ function createActiveMessageStore() {
   );
 
   (async () => {
-    const initialData = await pb.collection("activeMessage").getFullList({
-      expand: "message"
+    const initialActiveMessages = await pb.collection("activeMessage").getFullList();
+    // Only use the first record. Assumes that PB already has this record.
+    const initialActiveMessage = initialActiveMessages[0];
+    const initialMessages = await pb.collection("displayMessages").getFullList();
+    const initialMessage = initialMessages.filter((m) => m.id == initialActiveMessage.message)[0];
+
+    // @ts-expect-error Typing again
+    const initialData = mapToActiveMessage({
+      ...initialActiveMessage,
+      message: initialMessage
     });
 
-    // Only use the first record. Assumes that PB already has this record.
-    // @ts-expect-error Typing again
-    set(mapToActiveMessage(initialData[0]));
+    set(initialData);
 
-    pb.collection("activeMessage").subscribe(
-      "*",
-      (event) => {
+    pb.collection("activeMessage").subscribe("*", (event) => {
+      update((state) => {
         // @ts-expect-error Typing again
-        set(mapToActiveMessage(event.record));
-      },
-      {
-        expand: "message"
-      }
-    );
+        return mapToActiveMessage({
+          ...event.record,
+          message: state.message
+        });
+      });
+    });
+
+    pb.collection("displayMessages").subscribe("*", (event) => {
+      update((state) => {
+        if (event.record.id == state.message.id) {
+          // @ts-expect-error Typing again
+          state.message = mapToMessage(event.record);
+        }
+        return state;
+      });
+    });
   })();
 
   return subscribe;
