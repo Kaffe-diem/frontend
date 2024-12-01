@@ -14,6 +14,7 @@
     "check:format": "prettier --check ."
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.2",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-node": "^5.2.7",
     "@sveltejs/kit": "^2.5.27",
@@ -39,6 +40,7 @@
   "dependencies": {
     "@types/eventsource": "^1.1.15",
     "@types/node": "^22.9.0",
+    "dotenv": "^16.4.5",
     "eventsource": "^2.0.2",
     "pocketbase": "^0.21.5",
     "vite-plugin-node-polyfills": "^0.22.0"

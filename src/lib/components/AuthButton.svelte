@@ -39,6 +39,15 @@
     goHome();
   }
 
+  async function loginWithBasicAuth() {
+    const username = prompt("Enter your username:");
+    const password = prompt("Enter your password:");
+    const authData = await pb.collection("users").authWithPassword(username!, password!);
+    console.log(authData);
+    document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
+    goHome();
+  }
+
   function logout() {
     pb.authStore.clear();
     document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
@@ -51,7 +60,7 @@
     >{#if children}{@render children()}{:else}Logg ut{/if}</button
   >
 {:else}
-  <button onclick={login} class={rest.class || ""}
+  <button onclick={login} oncontextmenu={loginWithBasicAuth} class={rest.class || ""}
     >{#if children}{@render children()}{:else}Logg inn{/if}</button
   >
 {/if}
