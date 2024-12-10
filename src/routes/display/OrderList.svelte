@@ -1,9 +1,9 @@
 <script lang="ts">
   import orders from "$stores/orderStore";
-  import type { State } from "$lib/types";
+  import { OrdersStateOptions } from "$lib/pocketbase";
 
   interface Props {
-    show: State[];
+    show: OrdersStateOptions[];
   }
 
   let { show }: Props = $props();
@@ -11,7 +11,7 @@
 
 <div class="flex flex-wrap gap-2">
   {#each $orders as order, index}
-    {#if show.includes(order.state)}
+    {#if show.includes(order?.state)}
       <button class="btn btn-lg bg-base-200 text-3xl font-normal text-neutral">{index + 100}</button
       >
     {/if}

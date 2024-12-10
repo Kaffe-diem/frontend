@@ -3,21 +3,18 @@
   import { restrictedRoutes, adminRoutes } from "$lib/constants";
   import MenuIcon from "$assets/MenuIcon.svelte";
   import NavItems from "$components/NavItems.svelte";
+  import type { NavItem } from "$lib/types";
 
-  class NavItem {
-    href: string;
-    text: string;
-    requiresAuth: boolean;
+  const makeNavItem = (href: string, text: string): NavItem => {
+    return {
+      href,
+      text,
+      requiresAuth: restrictedRoutes.includes(href),
+      requiresAdmin: adminRoutes.includes(href)
+    };
+  };
 
-    constructor(href: string, text: string) {
-      this.href = href;
-      this.text = text;
-      this.requiresAuth = restrictedRoutes.includes(this.href);
-      this.requiresAdmin = adminRoutes.includes(this.href);
-    }
-  }
-
-  const navItems = [new NavItem("/account", "Min bruker"), new NavItem("/admin", "Admin")];
+  const navItems = [makeNavItem("/account", "Min bruker"), makeNavItem("/admin", "Admin")];
 </script>
 
 <div class="drawer drawer-end z-[2]">

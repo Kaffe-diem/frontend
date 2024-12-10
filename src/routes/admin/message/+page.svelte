@@ -1,27 +1,29 @@
 <script lang="ts">
   import { messages, activeMessage } from "$stores/messageStore";
-  import { Message, ActiveMessage } from "$lib/types";
   import { debounce } from "$lib/utils";
+  import type { DisplayMessagesResponse } from "$lib/pocketbase";
 
-  const handleActiveMessageChange = (message) => {
-    activeMessage.update(
-      new ActiveMessage({
-        ...$activeMessage,
-        visible: true,
-        message
-      })
-    );
+  const handleActiveMessageChange = (message: DisplayMessagesResponse) => {
+    activeMessage.update({
+      message: message.id,
+      isVisible: true,
+      expand: {
+        message: message
+      }
+    });
   };
 
-  const handleMessageTextChange = (event, message, field: "title" | "subtext") => {
-    messages.update(
-      new Message({
-        ...message,
-        [field]: event.target.value
-      })
-    );
+  const handleMessageTextChange = (
+    e: Event,
+    message: DisplayMessagesResponse,
+    field: "title" | "subtext"
+  ) => {
+    messages.update({
+      ...message,
+      [field]: (e.target as HTMLInputElement).value
+    } as DisplayMessagesResponse);
 
-    const isActive = message.id === $activeMessage.message.id;
+    const isActive = message.id === $activeMessage?.expand.message.id;
     if (isActive) {
       debounce(handleActiveMessageChange, 100)(message);
     }
@@ -46,16 +48,10 @@
             type="radio"
             class="radio"
             name="selected"
-            checked={message.id == $activeMessage.message.id}
-            value={message}
-            onchange={() => handleActiveMessageChange(message)}
+            checked={message.id == $activeMessage?.expand.message.id}
           />
-          <input
-            type="text"
-            class="input input-lg input-bordered w-full"
-            value={message.title}
-            placeholder="Tittel"
-            oninput={(event) => handleMessageTextChange(event, message, "title")}
+          type="text" class="input input-lg input-bordered w-full" value={message.title}
+          placeholder="Tittel" oninput={(event) => handleMessageTextChange(event, message, "title")}
           />
           <input
             type="text"
@@ -81,7 +77,7 @@
           type="radio"
           class="radio mr-4"
           name="selected"
-          checked={!$activeMessage.visible}
+          checked={!$activeMessage.isVisible}
           onchange={handleVisibilityChange}
         />
         <span>Åpent!</span>

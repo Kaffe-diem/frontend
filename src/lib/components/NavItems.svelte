@@ -1,6 +1,15 @@
-<script>
+<script lang="ts">
+  import type { NavItem } from "$lib/types";
   import AuthButton from "$components/AuthButton.svelte";
-  let { navItems, isAuthenticated, isAdmin, ...rest } = $props();
+
+  interface Props {
+    navItems: NavItem[];
+    isAuthenticated: boolean;
+    isAdmin: boolean;
+    [key: string]: any;
+  }
+
+  let { navItems, isAuthenticated, isAdmin, ...rest }: Props = $props();
 </script>
 
 <ul class="menu {rest.class || ''}">

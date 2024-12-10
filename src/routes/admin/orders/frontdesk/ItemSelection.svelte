@@ -8,7 +8,7 @@
     <div class="mb-8">
       <h1 class="mb-4 text-2xl font-bold text-primary">{category.name}</h1>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {#each category.items as item}
+        {#each category.expand.drinks_via_category as item}
           <label>
             <input
               type="radio"

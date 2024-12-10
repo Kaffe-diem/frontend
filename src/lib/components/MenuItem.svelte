@@ -1,10 +1,9 @@
 <script lang="ts">
   import auth from "$stores/authStore";
   import orders from "$stores/orderStore";
-  import { Item } from "$lib/types";
 
   interface Props {
-    item: Item;
+    item: any;
     buyButton: boolean;
   }
 

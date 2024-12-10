@@ -1,8 +1,9 @@
 <script lang="ts">
+  import type { DrinksResponse } from "$lib/pocketbase";
   let { selectedItem } = $props();
   import orders from "$stores/orderStore";
 
-  let cart = $state([]);
+  let cart = $state<DrinksResponse[]>([]);
   let totalPrice = $derived(cart.reduce((sum, item) => sum + item.price, 0));
 </script>
 

@@ -3,6 +3,9 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,

@@ -12,39 +12,36 @@ Dette prosjektet har blitt utviklet på kodekafe. [Bli med på Discord!](https:/
 
 Det er nyttig å enten ha Linux eller WSL.
 
+Bemerk at node versjon 20 brukes. Det kan installeres med NVM:
+
 ```bash
-echo "PUBLIC_PB_HOST=https://kodekafe-pocketbase.fly.dev" > .env
-npm i
 nvm use 20
+```
+
+### Teste på lokal maskin (dependencies allerede installert, hvis ikke: `npm ci`)
+
+1. .env
+
+```
+PUBLIC_PB_HOST=https://kodekafe-pocketbase.fly.dev
+PB_ADMIN_EMAIL=
+PB_ADMIN_PASSWORD=
+```
+
+```bash
+export $(xargs <.env)
+```
+
+2. Bygg og kjør appen
+
+```bash
 make
 ```
 
-Bemerk at node versjon 20 brukes. Det er ikke nødvendig å installere denne med NVM, men det er praktisk.
-
-Man kan også kjøre Pocketbase lokalt via docker, dette er lurt om man skal endre på schema. Dette er via Docker, via make:
+Man kan også kjøre Pocketbase lokalt via docker, dette er lurt om man skal endre på schema.
 
 ```bash
 make db
-```
-
-## Teste prod build?
-
-[intern monolog: refaktorsier dette via https://github.com/Kaffe-diem/kaffediem/issues/50]
-
-### Teste på lokal maskin
-
-(Antar at dependencies allerede er installert)
-
-1. Bygg appen
-
-```bash
-npm run build
-```
-
-2. Kjør appen
-
-```bash
-node build
 ```
 
 ### Hvis dependencies ikke er installert (for eksempel på rpi):

@@ -1,4 +1,4 @@
-import pb from "$lib/pocketbase";
+import pb, { Collections, type CollectionResponses } from "$lib/pocketbase";
 import { writable } from "svelte/store";
 
 // ref: https://github.com/pocketbase/js-sdk?tab=readme-ov-file#nodejs-via-npm
@@ -6,34 +6,29 @@ import eventsource from "eventsource";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (global as any).EventSource = eventsource;
 
-export default function createPbStore<T>(
-  collection: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mapFunction: (data: any) => T,
-  fetchOptions: { [key: string]: string } = {},
-  subscribeOptions: { [key: string]: string } = fetchOptions
+export default function createPbStore<T extends Collections>(
+  collection: T,
+  fetchOptions: Record<string, string> = {},
+  subscribeOptions: Record<string, string> = fetchOptions
 ) {
-  const { subscribe, set, update } = writable<T[]>([]);
+  const { subscribe, set, update } = writable<CollectionResponses[T][]>([]);
 
   (async () => {
     const initialData = await pb.collection(collection).getFullList(fetchOptions);
-
-    set(initialData.map(mapFunction));
+    set(initialData as CollectionResponses[T][]);
 
     pb.collection(collection).subscribe(
       "*",
-      (event) => {
+      (event: { record: CollectionResponses[T]; action: string }) => {
         update((state) => {
-          // @ts-expect-error All targets of record maps should have an id.
           const itemIndex = state.findIndex((item) => item.id == event.record.id);
-          const item = mapFunction(event.record);
 
           switch (event.action) {
             case "create":
-              state.push(item);
+              state.push(event.record);
               break;
             case "update":
-              if (itemIndex !== -1) state[itemIndex] = item;
+              if (itemIndex !== -1) state[itemIndex] = event.record;
               break;
             case "delete":
               if (itemIndex !== -1) state.splice(itemIndex, 1);

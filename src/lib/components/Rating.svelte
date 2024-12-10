@@ -1,14 +1,10 @@
 <script lang="ts">
-  function inputChange(newValue: number) {
-    value = newValue;
-  }
-
-  interface Props {
+  interface RatingProps {
     value?: number;
     readonly?: boolean;
-    // Name is only required when the component's value can change
-    name?: string;
+    name?: string | null;
     maxRating?: number;
+    class?: string;
     [key: string]: any;
   }
 
@@ -17,24 +13,32 @@
     readonly = false,
     name = null,
     maxRating = 10,
-    ...rest
-  }: Props = $props();
-  const items = Array.from({ length: maxRating }, (_, i) => i + 1); // Ascending list from 1 to maxRating
+    class: className = ""
+  }: RatingProps = $props();
+
+  function generateRatingItems(max: number): number[] {
+    return Array.from({ length: max }, (_, i) => i + 1);
+  }
+
+  const items = generateRatingItems(maxRating);
+
+  function handleRatingChange(newValue: number): void {
+    if (!readonly) {
+      value = newValue;
+    }
+  }
 </script>
 
-<div class="rating rating-half block {rest.class || ''}">
-  <!-- Required for tailwind to compile classes: -->
-  <!-- The following classes are used: mask-half-1 mask-half-2 -->
-  {#each items as n}
+<div class="rating rating-half block {className}">
+  {#each items as rating}
     <input
       type="radio"
       {name}
-      class="mask-coffee mask {'mask-half-' + (2 - (n % 2))} bg-accent {readonly
-        ? 'cursor-default'
-        : ''}"
-      checked={n == value}
+      class="mask-coffee mask mask-half-{2 - (rating % 2)} bg-accent"
+      class:cursor-default={readonly}
+      checked={rating === value}
       disabled={readonly}
-      onchange={() => inputChange(n)}
+      onchange={() => handleRatingChange(rating)}
     />
   {/each}
 </div>

@@ -40,7 +40,7 @@
     "@types/eventsource": "^1.1.15",
     "@types/node": "^22.9.0",
     "eventsource": "^2.0.2",
-    "pocketbase": "^0.21.5",
+    "pocketbase": "^0.22.1",
     "vite-plugin-node-polyfills": "^0.22.0"
   }
 }
