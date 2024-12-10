@@ -1,0 +1,63 @@
+@startchen
+
+entity order {
+  customer
+  state
+}
+
+relationship items {
+}
+
+entity order_item {
+}
+
+relationship "item" as order_item_relation {
+}
+
+entity item {
+  name
+  image
+  price
+}
+
+relationship "category" as item_category {
+}
+
+entity category {
+  name
+}
+
+item -1- item_category
+item_category -1- category
+
+order_item -1- order_item_relation
+order_item_relation -1- item
+
+order -N- items
+items -1- order_item
+
+relationship customizations {
+}
+
+entity order_customization {
+  value
+}
+
+order_item -N- customizations
+customizations -1- order_customization
+
+relationship customization {
+}
+
+item -N- customization
+
+entity "customization" as customization_table {
+  name
+  options
+  default
+}
+
+order_customization -1- customization
+customization -1- customization_table
+
+@endchen
